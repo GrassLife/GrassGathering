@@ -1,7 +1,7 @@
 package life.grass.grassgathering.fishing.event;
 
-import life.grass.grasscore.fishing.FishableItem;
-import life.grass.grasscore.fishing.FishingManager;
+import life.grass.grassgathering.fishing.FishableItem;
+import life.grass.grassgathering.fishing.FishingManager;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Item;

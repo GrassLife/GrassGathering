@@ -1,6 +1,6 @@
 package life.grass.grassgathering.mining;
 
-import life.grass.grasscore.GrassCore;
+import life.grass.grassgathering.GrassGathering;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,7 +59,7 @@ public enum EMinableItems {
         if (prob < ratio && prob > 0) {
             event.getPlayer().getWorld().dropItemNaturally(bLocation, material);
             int chain = (int) (Math.random() * (maxChain + 1));
-            event.getPlayer().setMetadata(this.name() + "chain" ,new FixedMetadataValue(GrassCore.getInstance(), chain));
+            event.getPlayer().setMetadata(this.name() + "chain" ,new FixedMetadataValue(GrassGathering.getInstance(), chain));
         }
 
     }
@@ -68,11 +68,11 @@ public enum EMinableItems {
         Player player = event.getPlayer();
         List<MetadataValue> chains = player.getMetadata(this.name() + "chain");
         for(MetadataValue chain : chains){
-            if (chain.getOwningPlugin().getDescription().getName().equals(GrassCore.getInstance().getDescription().getName())){
+            if (chain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())){
                 if ((int) chain.value() > 0){
                     int chain1 = (int) chain.value();
                     player.getWorld().dropItemNaturally(bLocation, material);
-                    player.setMetadata(this.name() + "chain", new FixedMetadataValue(GrassCore.getInstance(), chain1 - 1));
+                    player.setMetadata(this.name() + "chain", new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
                 }
             }
         }
