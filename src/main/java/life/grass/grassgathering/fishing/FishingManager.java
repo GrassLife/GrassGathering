@@ -93,4 +93,8 @@ public class FishingManager {
     public static HashMap<FishableItem, ItemStack> getFitemMap() {
         return fitemMap;
     }
+
+    public static List<Double> getFailList() {
+        return failList;
+    }
 }

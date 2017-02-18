@@ -16,6 +16,7 @@ public final class GrassGathering extends JavaPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
+        instance  = this;
         getServer().getPluginManager().registerEvents(new PlayerFishingEvent(), this);
         getServer().getPluginManager().registerEvents(new MiningEvent(), this);
     }

@@ -24,8 +24,8 @@ public class PlayerFishingEvent implements Listener {
 
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
             Item gottenFish = (Item) event.getCaught();
-            List<Double> nope = FishingManager.makeSumList(FishingManager.makeFailList());
-            if(FishingManager.probMaker(nope) == 0){
+            List<Double> miss = FishingManager.makeSumList(FishingManager.getFailList());
+            if(FishingManager.probMaker(miss) == 0){
                 gottenFish.remove();
             } else {
                 List<Double> ratioList = FishingManager.makeRatioList(playerBiome, playerWeather);
