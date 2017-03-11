@@ -72,7 +72,6 @@ public class FishingManager {
      */
     public static int probMaker(List<Double> list) {
         double random = Math.random() * list.get(list.size() - 1);
-        System.out.println(random);
         int indexNumber = 0;
         for (int i = 0; i < list.size(); i++) {
             double left = i == 0 ? 0 : list.get(i - 1);
