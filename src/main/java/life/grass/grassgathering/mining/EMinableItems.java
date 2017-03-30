@@ -56,10 +56,6 @@ public enum EMinableItems {
         return highestRatio;
     }
 
-    public int getKnowledgePoint() {
-        return knowledgePoint;
-    }
-
     public void dropItem(BlockBreakEvent event, Location bLocation){
         double prob = Math.random();
         double ratio = (exp( -pow(((modeHeight - bLocation.getY()) * 2) / (modeHeight * vRate), 2))) * highestRatio;
