@@ -31,7 +31,7 @@ public class PlayerFishingEvent implements Listener {
                 List<Double> ratioList = FishingManager.makeRatioList(playerBiome, playerWeather);
                 List<Double> rsumList = FishingManager.makeSumList(ratioList);
                 FishableItem harvest = FishingManager.getFishList().get(FishingManager.probMaker(rsumList));
-                gottenFish.setItemStack(FishingManager.getFitemMap().get(harvest));
+                gottenFish.setItemStack(FishingManager.getFishItemMap().get(harvest));
                 stats.increaseKnowledgePoint("FISHING", 5);
             }
         }

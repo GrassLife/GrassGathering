@@ -15,7 +15,7 @@ import java.util.List;
 public class FishingManager {
 
     private static List<FishableItem> fishList = makeItemList();
-    private static HashMap<FishableItem, ItemStack> fitemMap = makeFitemMap();
+    private static HashMap<FishableItem, ItemStack> fishItemMap = makeFishItemMap();
     private static List<Double> failList = makeFailList();
 
     /*
@@ -29,7 +29,7 @@ public class FishingManager {
         return list;
     }
 
-    public static HashMap<FishableItem, ItemStack> makeFitemMap(){
+    public static HashMap<FishableItem, ItemStack> makeFishItemMap(){
         HashMap<FishableItem, ItemStack> map = new HashMap<>();
         map.put(fishList.get(0), new ItemStack(Material.RAW_BEEF));
         map.put(fishList.get(1), new ItemStack(Material.RAW_CHICKEN));
@@ -89,8 +89,8 @@ public class FishingManager {
         return fishList;
     }
 
-    public static HashMap<FishableItem, ItemStack> getFitemMap() {
-        return fitemMap;
+    public static HashMap<FishableItem, ItemStack> getFishItemMap() {
+        return fishItemMap;
     }
 
     public static List<Double> getFailList() {
