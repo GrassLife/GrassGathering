@@ -93,6 +93,5 @@ public enum EMinableItems {
 
     public void increasePickaxeKnowledgePoint(KnowledgeStats stats) {
         stats.increaseKnowledgePoint("PICKAXE", knowledgePoint);
-        System.out.println(stats.getKnowledgePointString());
     }
 }

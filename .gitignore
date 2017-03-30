@@ -1,6 +1,7 @@
 .gradle/
 .idea/
 out/
+classes/
 *.iml
 META-INF
 target
