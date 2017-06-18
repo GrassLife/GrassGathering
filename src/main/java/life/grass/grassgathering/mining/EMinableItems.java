@@ -20,28 +20,54 @@ import static java.lang.Math.pow;
  */
 public enum EMinableItems {
 
-    COAL(new ItemStack(Material.COAL), 60, 0.022, 2.8, 10, 1),
-    IRON_ORE(new ItemStack(Material.IRON_ORE), 40, 0.0175, 2, 10, 2),
-    GOLD_ORE(new ItemStack(Material.GOLD_ORE), 30, 0.0075, 2, 6, 4),
-    LAPIS_LAZULI(new ItemStack(Material.INK_SACK, 1, (short)4), 35, 0.012, 0.5, 10, 3),
-    EMERALD(new ItemStack(Material.EMERALD), 20, 0.015, 0.2, 5, 5),
-    DIAMOND(new ItemStack(Material.DIAMOND), 13, 0.002, 1.5, 5, 10),
-    REDSTONE(new ItemStack(Material.REDSTONE), 15, 0.02, 1.4, 10, 3);
+    COAL(new ItemStack(Material.COAL),
+            intConfig("coal.modeHeight"),
+            doubleConfig("coal.highestRatio"),
+            doubleConfig("coal.vRate"),
+            intConfig("coal.maxChain")),
+    IRON_ORE(new ItemStack(Material.IRON_ORE),
+            intConfig("iron_ore.modeHeight"),
+            doubleConfig("iron_ore.highestRatio"),
+            doubleConfig("iron_ore.vRate"),
+            intConfig("iron_ore.maxChain")),
+    GOLD_ORE(new ItemStack(Material.GOLD_ORE),
+            intConfig("gold_ore.modeHeight"),
+            doubleConfig("gold_ore.highestRatio"),
+            doubleConfig("gold_ore.vRate"),
+            intConfig("gold_ore.maxChain")),
+    LAPIS_LAZULI(new ItemStack(Material.INK_SACK, 1, (short)4),
+            intConfig("lapis_lazuli.modeHeight"),
+            doubleConfig("lapis_lazuli.highestRatio"),
+            doubleConfig("lapis_lazuli.vRate"),
+            intConfig("lapis_lazuli.maxChain")),
+    EMERALD(new ItemStack(Material.EMERALD),
+            intConfig("emerald.modeHeight"),
+            doubleConfig("emerald.highestRatio"),
+            doubleConfig("emerald.vRate"),
+            intConfig("emerald.maxChain")),
+    DIAMOND(new ItemStack(Material.DIAMOND),
+            intConfig("diamond.modeHeight"),
+            doubleConfig("diamond.highestRatio"),
+            doubleConfig("diamond.vRate"),
+            intConfig("diamond.maxChain")),
+    REDSTONE(new ItemStack(Material.REDSTONE),
+            intConfig("redstone.modeHeight"),
+            doubleConfig("redstone.highestRatio"),
+            doubleConfig("redstone.vRate"),
+            intConfig("redstone.maxChain"));
 
     private final ItemStack material;
     private final int modeHeight;
     private final double highestRatio;
     private final double vRate;
     private final int maxChain;
-    private final int knowledgePoint;
 
-    EMinableItems(ItemStack material, int modeHeight, double highestRatio, double vRate, int maxChain, int knowledgePoint) {
+    EMinableItems(ItemStack material, int modeHeight, double highestRatio, double vRate, int maxChain) {
         this.material = material;
         this.modeHeight = modeHeight;
         this.highestRatio = highestRatio;
         this.vRate = vRate;
         this.maxChain = maxChain;
-        this.knowledgePoint = knowledgePoint;
     }
 
     public ItemStack getMaterial() {
@@ -63,7 +89,6 @@ public enum EMinableItems {
             event.getPlayer().getWorld().dropItemNaturally(bLocation, material);
 
             KnowledgeStats stats = new KnowledgeStats(event.getPlayer());
-            increasePickaxeKnowledgePoint(stats);
             int chain = (int) (Math.random() * (maxChain + 1));
             event.getPlayer().setMetadata(this.name() + "chain" ,new FixedMetadataValue(GrassGathering.getInstance(), chain));
         }
@@ -80,14 +105,18 @@ public enum EMinableItems {
                     player.getWorld().dropItemNaturally(bLocation, material);
 
                     KnowledgeStats stats = new KnowledgeStats(event.getPlayer());
-                    increasePickaxeKnowledgePoint(stats);
                     player.setMetadata(this.name() + "chain", new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
                 }
             }
         }
     }
 
-    public void increasePickaxeKnowledgePoint(KnowledgeStats stats) {
-        stats.increaseKnowledgePoint("PICKAXE", knowledgePoint);
+    private static int intConfig(String string) {
+        return Integer.parseInt(GrassGathering.getInstance().getConfig().get(string).toString());
     }
+
+    private static double doubleConfig(String string) {
+        return Double.parseDouble(GrassGathering.getInstance().getConfig().get(string).toString());
+    }
+
 }
