@@ -9,9 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
-/**
- * Created by takah on 2016/10/04.
- */
 public class MiningEvent implements Listener {
     @EventHandler
     public void onMining(BlockBreakEvent event){
@@ -21,7 +18,7 @@ public class MiningEvent implements Listener {
             scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    MiningManager.decideDrop(event, bLocation);
+                    MiningManager.decideDrop(event.getPlayer(), bLocation);
                 }
             }, 5L);
 
