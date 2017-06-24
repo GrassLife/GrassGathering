@@ -32,6 +32,7 @@ public class PlayerFishingEvent implements Listener {
 
             if(FishingManager.probMaker(miss) == 0){
                 gottenFish.remove();
+                event.getPlayer().sendTitle("", "魚が逃げてしまった!!", 10, 70, 20);
             } else {
 
                 List<Double> ratioList = FishingManager.makeRatioList(playerBiome, playerWeather);
