@@ -1,26 +1,31 @@
 package life.grass.grassgathering.fishing;
 
+import life.grass.grassgathering.GrassGathering;
+import life.grass.grassitem.GrassJson;
+import life.grass.grassitem.ItemBuilder;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-/**
- * Created by takah on 2016/09/08.
- */
 public class FishableItem {
+
     private int defaultRatio;
     private HashMap<Biome, Double> bioRate = new HashMap<>();
     private HashMap<WeatherType, Double> weatherRate = new HashMap<>();
-    private double realRatio;
+    private ItemStack itemStack;
 
-    FishableItem(int value){
-        this.defaultRatio = value;
+    FishableItem(int defaultRatio, String itemUniqueName){
+        this.defaultRatio = defaultRatio;
+        this.itemStack = ItemBuilder.buildByUniqueName(itemUniqueName);
     }
 
     public double getRealratio(Biome b, WeatherType w) {
+
         double r1;
         double r2;
+        double realRatio;
 
         r1 = bioRate.get(b) == null ? 1 : bioRate.get(b);
 
@@ -28,6 +33,10 @@ public class FishableItem {
 
         realRatio = r1 * r2 * defaultRatio;
         return realRatio;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     public void setBioRate(HashMap<Biome, Double> bioRate) {

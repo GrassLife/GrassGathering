@@ -1,40 +1,39 @@
 package life.grass.grassgathering.fishing;
 
+import life.grass.grassgathering.GrassGathering;
 import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by takah on 2016/09/08.
- */
 public class FishingManager {
 
-    private static List<FishableItem> fishList = makeItemList();
-    private static HashMap<FishableItem, ItemStack> fishItemMap = makeFishItemMap();
+    private static List<FishableItem> fishList = makeFishableItems();
     private static List<Double> failList = makeFailList();
 
     /*
     実装時はコンフィグからアイテムのリストを作る予定。
      */
-    public static List<FishableItem> makeItemList() {
-        List<FishableItem> list = new ArrayList<>();
-        for (int i = 0; i <= 2; i++) {
-            list.add(new FishableItem(1));
-        }
-        return list;
-    }
+    private static List<FishableItem> makeFishableItems() {
 
-    public static HashMap<FishableItem, ItemStack> makeFishItemMap(){
-        HashMap<FishableItem, ItemStack> map = new HashMap<>();
-        map.put(fishList.get(0), new ItemStack(Material.RAW_BEEF));
-        map.put(fishList.get(1), new ItemStack(Material.RAW_CHICKEN));
-        map.put(fishList.get(2), new ItemStack(Material.RAW_FISH));
-        return map;
+        List<FishableItem> fishableItemList = new ArrayList<FishableItem>();
+        ConfigurationSection items = GrassGathering.getInstance().getConfig().getConfigurationSection("fishableItems");
+
+        for(String key : items.getKeys(false)) {
+            ConfigurationSection item = items.getConfigurationSection(key);
+
+            fishableItemList.add(new FishableItem(
+                    Integer.parseInt(item.get("defaultRatio").toString()),
+                    item.get("uniqueName").toString()
+            ));
+
+        }
+        return fishableItemList;
     }
 
     public static List<Double> makeFailList(){
@@ -87,10 +86,6 @@ public class FishingManager {
 
     public static List<FishableItem> getFishList() {
         return fishList;
-    }
-
-    public static HashMap<FishableItem, ItemStack> getFishItemMap() {
-        return fishItemMap;
     }
 
     public static List<Double> getFailList() {
