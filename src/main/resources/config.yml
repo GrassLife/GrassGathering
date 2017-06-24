@@ -1,50 +1,51 @@
-items:
+minableItems:
 
   coal:
-    material: coal
+    uniqueName: Vanilla_COAL
     modeHeight: 60
     highestRatio: 0.022
     vRate: 2.8
     maxChain: 10
 
   iron_ore:
-    material: iron_ore
+    uniqueName: Vanilla_IRON_ORE
     modeHeight: 40
     highestRatio: 0.0175
     vRate: 2
     maxChain: 10
 
   gold_ore:
-    material: gold_ore
+    uniqueName: Vanilla_GOALD_ORE
     modeHeight: 30
     highestRatio: 0.0075
     vRate: 2
     maxChain: 6
 
-  lapis_lazuli:
-    material: lapis_lazuli
-    modeHeight: 35
-    highestRatio: 0.012
-    vRate: 0.5
-    maxChain: 10
-
   emerald:
-    material: emerald
+    uniqueName: Vanilla_EMERALD
     modeHeight: 20
     highestRatio: 0.015
     vRate: 0.2
     maxChain: 5
 
   diamond:
-    material: diamond
+    uniqueName: Vanilla_DIAMOND
     modeHeight: 13
     highestRatio: 0.002
     vRate: 1.5
     maxChain: 5
 
   redstone:
-    material: redstone
+    uniqueName: Vanilla_REDSTONE
     modeHeight: 15
     highestRatio: 0.02
     vRate: 1.4
     maxChain: 10
+
+fishableItems:
+
+  zako:
+    defaultRatio: 1
+    uniqueName: Vanilla_RAW_FISH
+    ExpireHours: 6
+    Sachi: 4

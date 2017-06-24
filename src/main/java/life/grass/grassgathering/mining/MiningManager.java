@@ -23,13 +23,13 @@ public class MiningManager {
     private static List<MinableItem> makeMinableItems() {
 
         List<MinableItem> minableItemList = new ArrayList<MinableItem>();
-        ConfigurationSection items = GrassGathering.getInstance().getConfig().getConfigurationSection("items");
+        ConfigurationSection items = GrassGathering.getInstance().getConfig().getConfigurationSection("minableItems");
 
         for(String key : items.getKeys(false)) {
             ConfigurationSection item = items.getConfigurationSection(key);
 
             minableItemList.add(new MinableItem(
-                    key,
+                    item.get("uniqueName").toString(),
                     Integer.parseInt(item.get("modeHeight").toString()),
                     Double.parseDouble(item.get("highestRatio").toString()),
                     Double.parseDouble(item.get("vRate").toString()),

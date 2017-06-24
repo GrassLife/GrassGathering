@@ -1,6 +1,7 @@
 package life.grass.grassgathering.mining;
 
 import life.grass.grassgathering.GrassGathering;
+import life.grass.grassitem.ItemBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,14 +16,14 @@ import static java.lang.Math.pow;
 
 public class MinableItem {
 
-    private final String name;
+    private final String uniqueName;
     private final int modeHeight;
     private final double highestRatio;
     private final double vRate;
     private final int maxChain;
 
     MinableItem(String name, int modeHeight, double highestRatio, double vRate, int maxChain) {
-        this.name = name;
+        this.uniqueName = name;
         this.modeHeight = modeHeight;
         this.highestRatio = highestRatio;
         this.vRate = vRate;
@@ -38,14 +39,14 @@ public class MinableItem {
             player.getWorld().dropItemNaturally(bLocation, getItemStack());
 
             int chain = (int) (Math.random() * (maxChain + 1));
-            player.setMetadata(this.name + "chain" ,new FixedMetadataValue(GrassGathering.getInstance(), chain));
+            player.setMetadata(this.uniqueName + "chain" ,new FixedMetadataValue(GrassGathering.getInstance(), chain));
         }
 
     }
 
     public void chainItem(Player player, Location bLocation) {
 
-        List<MetadataValue> chains = player.getMetadata(this.name + "chain");
+        List<MetadataValue> chains = player.getMetadata(this.uniqueName + "chain");
 
         for (MetadataValue chain : chains) {
             if (chain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())) {
@@ -53,13 +54,13 @@ public class MinableItem {
                     int chain1 = (int) chain.value();
                     player.getWorld().dropItemNaturally(bLocation, getItemStack());
 
-                    player.setMetadata(this.name + "chain", new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
+                    player.setMetadata(this.uniqueName + "chain", new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
                 }
             }
         }
     }
 
     public ItemStack getItemStack() {
-       return new ItemStack(Material.getMaterial(this.name.toUpperCase()));
+       return ItemBuilder.buildByUniqueName(uniqueName);
     }
 }
