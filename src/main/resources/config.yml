@@ -1,43 +1,50 @@
-coal:
-  modeHeight: 60
-  highestRatio: 0.022
-  vRate: 2.8
-  maxChain: 10
+items:
 
-iron_ore:
-  modeHeight: 40
-  highestRatio: 0.0175
-  vRate: 2
-  maxChain: 10
+  coal:
+    material: coal
+    modeHeight: 60
+    highestRatio: 0.022
+    vRate: 2.8
+    maxChain: 10
 
-gold_ore:
-  modeHeight: 30
-  highestRatio: 0.0075
-  vRate: 2
-  maxChain: 6
-  knowledgePoint: 4
+  iron_ore:
+    material: iron_ore
+    modeHeight: 40
+    highestRatio: 0.0175
+    vRate: 2
+    maxChain: 10
 
-lapis_lazuli:
-  modeHeight: 35
-  highestRatio: 0.012
-  vRate: 0.5
-  maxChain: 10
+  gold_ore:
+    material: gold_ore
+    modeHeight: 30
+    highestRatio: 0.0075
+    vRate: 2
+    maxChain: 6
 
-emerald:
-  modeHeight: 20
-  highestRatio: 0.015
-  vRate: 0.2
-  maxChain: 5
+  lapis_lazuli:
+    material: lapis_lazuli
+    modeHeight: 35
+    highestRatio: 0.012
+    vRate: 0.5
+    maxChain: 10
 
-diamond:
-  modeHeight: 13
-  highestRatio: 0.002
-  vRate: 1.5
-  maxChain: 5
-  knowledgePoint: 1
+  emerald:
+    material: emerald
+    modeHeight: 20
+    highestRatio: 0.015
+    vRate: 0.2
+    maxChain: 5
 
-redstone:
-  modeHeight: 15
-  highestRatio: 0.02
-  vRate: 1.4
-  maxChain: 10
+  diamond:
+    material: diamond
+    modeHeight: 13
+    highestRatio: 0.002
+    vRate: 1.5
+    maxChain: 5
+
+  redstone:
+    material: redstone
+    modeHeight: 15
+    highestRatio: 0.02
+    vRate: 1.4
+    maxChain: 10
