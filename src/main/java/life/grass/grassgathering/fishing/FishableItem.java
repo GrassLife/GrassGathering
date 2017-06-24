@@ -6,6 +6,7 @@ import life.grass.grassitem.ItemBuilder;
 import life.grass.grassitem.JsonHandler;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
@@ -18,9 +19,14 @@ public class FishableItem {
     private HashMap<WeatherType, Double> weatherRate = new HashMap<>();
     private ItemStack itemStack;
 
-    FishableItem(int defaultRatio, String itemUniqueName){
-        this.defaultRatio = defaultRatio;
-        ItemStack item = ItemBuilder.buildByUniqueName(itemUniqueName);
+    FishableItem(ConfigurationSection config){
+        this.defaultRatio = Integer.parseInt(config.get("defaultRatio").toString());
+        ItemStack item = ItemBuilder.buildByUniqueName(config.get("uniqueName").toString());
+        double sizeRate = 0.5 + Math.random();
+        item = JsonHandler.putDynamicData(item, "ExpireDate", LocalDateTime.now().plusHours(Long.parseLong(config.get("ExpireHours").toString())).toString());
+        item = JsonHandler.putDynamicData(item, "FoodElement/SACHI", -Integer.parseInt(config.get("Sachi").toString()));
+        item = JsonHandler.putDynamicData(item, "Calorie", "*" + sizeRate);
+        item = JsonHandler.putDynamicData(item, "Weight", "*" + sizeRate);
         this.itemStack = item;
     }
 

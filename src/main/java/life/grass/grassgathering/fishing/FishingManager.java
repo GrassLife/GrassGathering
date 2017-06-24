@@ -27,10 +27,7 @@ public class FishingManager {
         for(String key : items.getKeys(false)) {
             ConfigurationSection item = items.getConfigurationSection(key);
 
-            fishableItemList.add(new FishableItem(
-                    Integer.parseInt(item.get("defaultRatio").toString()),
-                    item.get("uniqueName").toString()
-            ));
+            fishableItemList.add(new FishableItem(item));
 
         }
         return fishableItemList;

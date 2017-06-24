@@ -47,3 +47,5 @@ fishableItems:
   zako:
     defaultRatio: 1
     uniqueName: Vanilla_RAW_FISH
+    ExpireHours: 6
+    Sachi: 4
