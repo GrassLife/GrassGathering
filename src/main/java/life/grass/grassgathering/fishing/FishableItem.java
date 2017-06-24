@@ -3,10 +3,12 @@ package life.grass.grassgathering.fishing;
 import life.grass.grassgathering.GrassGathering;
 import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.ItemBuilder;
+import life.grass.grassitem.JsonHandler;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class FishableItem {
@@ -18,7 +20,8 @@ public class FishableItem {
 
     FishableItem(int defaultRatio, String itemUniqueName){
         this.defaultRatio = defaultRatio;
-        this.itemStack = ItemBuilder.buildByUniqueName(itemUniqueName);
+        ItemStack item = ItemBuilder.buildByUniqueName(itemUniqueName);
+        this.itemStack = item;
     }
 
     public double getRealratio(Biome b, WeatherType w) {
