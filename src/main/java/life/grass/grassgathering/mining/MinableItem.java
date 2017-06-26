@@ -1,7 +1,9 @@
 package life.grass.grassgathering.mining;
 
+import com.google.gson.JsonObject;
 import life.grass.grassgathering.GrassGathering;
 import life.grass.grassitem.ItemBuilder;
+import life.grass.grassitem.JsonHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,12 +24,14 @@ public class MinableItem {
     private final double vRate;
     private final int maxChain;
 
-    MinableItem(String name, int modeHeight, double highestRatio, double vRate, int maxChain) {
+    MinableItem(String name, JsonObject jsonObject) {
+        System.out.println(jsonObject.toString());
+        System.out.println("--------------------");
         this.uniqueName = name;
-        this.modeHeight = modeHeight;
-        this.highestRatio = highestRatio;
-        this.vRate = vRate;
-        this.maxChain = maxChain;
+        this.modeHeight = Integer.parseInt(jsonObject.get("modeHeight").toString());
+        this.highestRatio = Double.parseDouble(jsonObject.get("highestRatio").toString());
+        this.vRate = Double.parseDouble(jsonObject.get("vRate").toString());
+        this.maxChain = Integer.parseInt(jsonObject.get("maxChain").toString());
     }
 
     public void dropItem(Player player, Location bLocation){

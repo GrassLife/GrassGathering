@@ -1,12 +1,13 @@
 package life.grass.grassgathering.mining;
 
-import life.grass.grassgathering.GrassGathering;
+import com.google.gson.JsonObject;
+import life.grass.grassgathering.ResourceJsonContainer;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MiningManager {
 
@@ -22,21 +23,13 @@ public class MiningManager {
 
     private static List<MinableItem> makeMinableItems() {
 
-        List<MinableItem> minableItemList = new ArrayList<MinableItem>();
-        ConfigurationSection items = GrassGathering.getInstance().getConfig().getConfigurationSection("minableItems");
+        List<MinableItem> minableItemList = new ArrayList<>();
 
-        for(String key : items.getKeys(false)) {
-            ConfigurationSection item = items.getConfigurationSection(key);
+        Map<String, JsonObject> mineJsonMap = ResourceJsonContainer.getInstance().getMineJsonMap();
 
-            minableItemList.add(new MinableItem(
-                    item.get("uniqueName").toString(),
-                    Integer.parseInt(item.get("modeHeight").toString()),
-                    Double.parseDouble(item.get("highestRatio").toString()),
-                    Double.parseDouble(item.get("vRate").toString()),
-                    Integer.parseInt(item.get("maxChain").toString())
-            ));
-
-        }
+        mineJsonMap.forEach((name, item) -> {
+            minableItemList.add(new MinableItem(name, item));
+        });
         return minableItemList;
     }
 }

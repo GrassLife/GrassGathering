@@ -1,7 +1,6 @@
 package life.grass.grassgathering.fishing;
 
-import life.grass.grassgathering.GrassGathering;
-import life.grass.grassitem.GrassJson;
+import com.google.gson.JsonObject;
 import life.grass.grassitem.ItemBuilder;
 import life.grass.grassitem.JsonHandler;
 import org.bukkit.WeatherType;
@@ -21,11 +20,11 @@ public class FishableItem {
     private long expireHours;
     private int sachi;
 
-    FishableItem(ConfigurationSection config){
+    FishableItem(String name, JsonObject config){
         this.defaultRatio = Integer.parseInt(config.get("defaultRatio").toString());
-        ItemStack item = ItemBuilder.buildByUniqueName(config.get("uniqueName").toString());
-        this.sachi = Integer.parseInt(config.get("Sachi").toString());
-        this.expireHours = Long.parseLong(config.get("ExpireHours").toString());
+        ItemStack item = ItemBuilder.buildByUniqueName(name);
+        this.sachi = Integer.parseInt(config.get("sachi").toString());
+        this.expireHours = Long.parseLong(config.get("expireHours").toString());
         this.itemStack = item;
     }
 
