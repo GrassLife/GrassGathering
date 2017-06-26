@@ -18,15 +18,14 @@ public class FishableItem {
     private HashMap<Biome, Double> bioRate = new HashMap<>();
     private HashMap<WeatherType, Double> weatherRate = new HashMap<>();
     private ItemStack itemStack;
+    private long expireHours;
+    private int sachi;
 
     FishableItem(ConfigurationSection config){
         this.defaultRatio = Integer.parseInt(config.get("defaultRatio").toString());
         ItemStack item = ItemBuilder.buildByUniqueName(config.get("uniqueName").toString());
-        double sizeRate = 0.5 + Math.random();
-        item = JsonHandler.putDynamicData(item, "ExpireDate", LocalDateTime.now().plusHours(Long.parseLong(config.get("ExpireHours").toString())).toString());
-        item = JsonHandler.putDynamicData(item, "FoodElement/SACHI", -Integer.parseInt(config.get("Sachi").toString()));
-        item = JsonHandler.putDynamicData(item, "Calorie", "*" + sizeRate);
-        item = JsonHandler.putDynamicData(item, "Weight", "*" + sizeRate);
+        this.sachi = Integer.parseInt(config.get("Sachi").toString());
+        this.expireHours = Long.parseLong(config.get("ExpireHours").toString());
         this.itemStack = item;
     }
 
@@ -45,7 +44,13 @@ public class FishableItem {
     }
 
     public ItemStack getItemStack() {
-        return itemStack;
+        ItemStack item = this.itemStack;
+        double sizeRate = 0.5 + Math.random();
+        item = JsonHandler.putDynamicData(item, "ExpireDate", LocalDateTime.now().plusHours(expireHours).toString());
+        item = JsonHandler.putDynamicData(item, "FoodElement/SACHI", -sachi);
+        item = JsonHandler.putDynamicData(item, "Calorie", "*" + sizeRate);
+        item = JsonHandler.putDynamicData(item, "Weight", "*" + sizeRate);
+        return item;
     }
 
     public void setBioRate(HashMap<Biome, Double> bioRate) {
