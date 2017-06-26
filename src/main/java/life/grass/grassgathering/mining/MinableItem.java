@@ -25,8 +25,6 @@ public class MinableItem {
     private final int maxChain;
 
     MinableItem(String name, JsonObject jsonObject) {
-        System.out.println(jsonObject.toString());
-        System.out.println("--------------------");
         this.uniqueName = name;
         this.modeHeight = Integer.parseInt(jsonObject.get("modeHeight").toString());
         this.highestRatio = Double.parseDouble(jsonObject.get("highestRatio").toString());

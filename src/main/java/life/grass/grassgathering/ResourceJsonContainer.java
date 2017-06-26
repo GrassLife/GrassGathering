@@ -59,7 +59,6 @@ public class ResourceJsonContainer {
         Arrays.stream(mineFolder.listFiles())
                 .filter(file -> file.getName().endsWith(".json"))
                 .forEach(json -> loadJsonFromFile(json).ifPresent(jsonObject -> mineJsonMap.put(jsonObject.get("mineName").getAsString(), jsonObject)));
-        System.out.println(mineJsonMap.toString());
     }
 
     private static Optional<JsonObject> loadJsonFromFile(File file) {
