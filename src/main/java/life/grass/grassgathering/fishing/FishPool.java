@@ -50,4 +50,8 @@ public class FishPool {
     public List<FishableItem> getFishList() {
         return fishList;
     }
+
+    public void releaseFishes() {
+        fishList = makeFishableItems();
+    }
 }
