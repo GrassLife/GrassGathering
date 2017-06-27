@@ -17,14 +17,14 @@ public class FishableItem {
     private HashMap<Biome, Double> bioRate = new HashMap<>();
     private HashMap<WeatherType, Double> weatherRate = new HashMap<>();
     private ItemStack itemStack;
-    private long expireHours;
+    private int expireHours;
     private int sachi;
 
     FishableItem(String name, JsonObject config){
-        this.defaultRatio = Integer.parseInt(config.get("defaultRatio").toString());
+        this.defaultRatio = config.get("defaultRatio").getAsInt();
         ItemStack item = ItemBuilder.buildByUniqueName(name);
-        this.sachi = Integer.parseInt(config.get("sachi").toString());
-        this.expireHours = Long.parseLong(config.get("expireHours").toString());
+        this.sachi = config.get("sachi").getAsInt();
+        this.expireHours = config.get("expireHours").getAsInt();
         this.itemStack = item;
     }
 

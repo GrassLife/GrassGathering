@@ -26,10 +26,10 @@ public class MinableItem {
 
     MinableItem(String name, JsonObject jsonObject) {
         this.uniqueName = name;
-        this.modeHeight = Integer.parseInt(jsonObject.get("modeHeight").toString());
-        this.highestRatio = Double.parseDouble(jsonObject.get("highestRatio").toString());
-        this.vRate = Double.parseDouble(jsonObject.get("vRate").toString());
-        this.maxChain = Integer.parseInt(jsonObject.get("maxChain").toString());
+        this.modeHeight = jsonObject.get("modeHeight").getAsInt();
+        this.highestRatio = jsonObject.get("highestRatio").getAsDouble();
+        this.vRate = jsonObject.get("vRate").getAsDouble();
+        this.maxChain = jsonObject.get("maxChain").getAsInt();
     }
 
     public void dropItem(Player player, Location bLocation){
