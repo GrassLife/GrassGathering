@@ -1,3 +1,15 @@
 name: GrassGathering
 version: ${project.version}
 main: life.grass.grassgathering.GrassGathering
+
+commands:
+  grassgathering:
+    usage: /grassgathering [reload]
+    permission: grassgathering.command
+    permission-message: sorry, you do not have permission to do.
+
+permissions:
+  grassgathering.*:
+    default: op
+  grassgathering.command:
+    default: op

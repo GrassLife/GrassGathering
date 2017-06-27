@@ -1,8 +1,7 @@
 package life.grass.grassgathering.fishing.event;
 
-import life.grass.grassgathering.fishing.FishableItem;
+import life.grass.grassgathering.fishing.FishPool;
 import life.grass.grassgathering.fishing.FishingManager;
-import life.grass.grassitem.JsonHandler;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Item;
@@ -11,12 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class PlayerFishingEvent implements Listener {
     @EventHandler
     public void onPlayerFishing(PlayerFishEvent event) {
+
+        FishPool fishPool = FishPool.getInstance();
 
         Biome playerBiome = event.getPlayer().getLocation().getWorld()
                 .getBiome(event.getPlayer().getLocation().getBlockX(), event.getPlayer().getLocation().getBlockZ());
@@ -35,9 +35,9 @@ public class PlayerFishingEvent implements Listener {
                 event.getPlayer().sendTitle("", "魚が逃げてしまった!!", 10, 70, 20);
             } else {
 
-                List<Double> ratioList = FishingManager.makeRatioList(playerBiome, playerWeather);
+                List<Double> ratioList = fishPool.getRatioList(playerBiome, playerWeather);
                 List<Double> rsumList = FishingManager.makeSumList(ratioList);
-                ItemStack harvest = FishingManager.getFishList().get(FishingManager.probMaker(rsumList)).getItemStack();
+                ItemStack harvest = fishPool.getFishList().get(FishingManager.probMaker(rsumList)).getItemStack();
                 gottenFish.setItemStack(harvest);
 
             }

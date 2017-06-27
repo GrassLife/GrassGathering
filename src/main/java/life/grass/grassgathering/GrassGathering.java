@@ -2,12 +2,7 @@ package life.grass.grassgathering;
 
 import life.grass.grassgathering.fishing.event.PlayerFishingEvent;
 import life.grass.grassgathering.mining.event.MiningEvent;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
 
 public final class GrassGathering extends JavaPlugin {
 
@@ -21,9 +16,10 @@ public final class GrassGathering extends JavaPlugin {
     public void onEnable() {
         super.onEnable();
         instance = this;
+        ResourceJsonContainer.getInstance();
         getServer().getPluginManager().registerEvents(new PlayerFishingEvent(), this);
         getServer().getPluginManager().registerEvents(new MiningEvent(), this);
-        createFile();
+        getCommand("grassgathering").setExecutor(new GrassGatheringCommandExecutor());
     }
 
     @Override
@@ -31,21 +27,4 @@ public final class GrassGathering extends JavaPlugin {
         super.onDisable();
     }
 
-
-    private void createFile() {
-        try {
-            if (!getDataFolder().exists()) {
-                getDataFolder().mkdirs();
-            }
-            File file = new File(getDataFolder(), "config.yml");
-            if (!file.exists()) {
-                getLogger().info("config.yml not found, creating...");
-                saveDefaultConfig();
-            } else {
-                getLogger().info("config.yml found, loading...");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
