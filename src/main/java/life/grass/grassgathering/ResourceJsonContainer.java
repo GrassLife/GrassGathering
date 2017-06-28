@@ -73,7 +73,7 @@ public class ResourceJsonContainer {
         return Optional.ofNullable(root);
     }
 
-    public void setResourceJsonContainer() {
-        resourceJsonContainer = new ResourceJsonContainer();
+    public void fillResourceJsonContainer() {
+        refillContainer();
     }
 }
