@@ -49,6 +49,13 @@ public class FishableItem {
         item = JsonHandler.putDynamicData(item, "FoodElement/SACHI", -sachi);
         item = JsonHandler.putDynamicData(item, "Calorie", "*" + sizeRate);
         item = JsonHandler.putDynamicData(item, "Weight", "*" + sizeRate);
+        double rand = Math.random();
+        if(rand <= 0.01) {
+            item = JsonHandler.putDynamicData(item, "Enchant/Prefix", "fatness");
+        } else if(rand <= 0.1) {
+            item = JsonHandler.putDynamicData(item, "Enchant/Prefix", "child");
+        }
+
         return item;
     }
 
