@@ -32,4 +32,8 @@ public class MiningManager {
         });
         return minableItemList;
     }
+
+    public static void setMinableItems() {
+        minableItems = makeMinableItems();
+    }
 }
