@@ -42,8 +42,22 @@ public class MinableItem {
 
             int chain = (int) (Math.random() * (maxChain + 1));
             player.setMetadata(this.uniqueName + "chain" ,new FixedMetadataValue(GrassGathering.getInstance(), chain));
-        }
 
+            List<MetadataValue> bbMetas = player.getMetadata(this.uniqueName + "BBChance");
+            System.out.println(bbMetas.size());
+            if (bbMetas.size() == 0) {
+                player.setMetadata(this.uniqueName + "BBChance", new FixedMetadataValue(GrassGathering.getInstance(), judgeBigBonus()));
+                bbMetas = player.getMetadata(this.uniqueName + "BBChance");
+            }
+            for (MetadataValue bbMeta : bbMetas) {
+                System.out.println((boolean) bbMeta.value());
+                if (judgeBigBonusChance() && !(boolean) bbMeta.value()) {
+                    player.setMetadata(this.uniqueName + "BBChance", new FixedMetadataValue(GrassGathering.getInstance(), judgeBigBonus()));
+                    player.setMetadata(this.uniqueName + "BBChain", new FixedMetadataValue(GrassGathering.getInstance(), 5));
+                    player.sendMessage("大鉱脈の予感");
+                }
+            }
+        }
     }
 
     public void chainItem(Player player, Location bLocation) {
@@ -60,6 +74,29 @@ public class MinableItem {
                 }
             }
         }
+
+        List<MetadataValue> bbChains = player.getMetadata(this.uniqueName + "BBChain");
+
+        for (MetadataValue bbChain :bbChains) {
+            if (bbChain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())) {
+                if ((int) bbChain.value() >= 0) {
+                    player.setMetadata(this.uniqueName + "chain", new FixedMetadataValue(GrassGathering.getInstance(), (int) bbChain.value() - 1));
+                    if ((int) bbChain.value() == 0) {
+                        player.sendMessage(judgeBigBonus() ? "大当たり" : "大外れ");
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    public boolean judgeBigBonusChance() {
+        return Math.random() < 1;
+    }
+
+    public boolean judgeBigBonus() {
+        return Math.random() < 0.5;
     }
 
     public ItemStack getItemStack() {
