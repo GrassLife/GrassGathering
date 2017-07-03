@@ -16,8 +16,7 @@ public class MiningManager {
     public static void decideDrop(Player player, Location bLocation) {
 
         minableItems.forEach(item -> {
-            item.dropItem(player, bLocation);
-            item.chainItem(player, bLocation);
+            item.mine(player, bLocation);
         });
     }
 

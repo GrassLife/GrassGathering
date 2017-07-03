@@ -3,13 +3,12 @@ package life.grass.grassgathering.mining;
 import com.google.gson.JsonObject;
 import life.grass.grassgathering.GrassGathering;
 import life.grass.grassitem.ItemBuilder;
-import life.grass.grassitem.JsonHandler;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.List;
 
@@ -24,45 +23,237 @@ public class MinableItem {
     private final double vRate;
     private final int maxChain;
 
+    private final String CHAIN_KEY;
+    private final String BBCHAIN_KEY;
+    private final String NOWBB_KEY;
+    private final ChatColor CHAT_COLOR;
+
     MinableItem(String name, JsonObject jsonObject) {
         this.uniqueName = name;
         this.modeHeight = jsonObject.get("modeHeight").getAsInt();
         this.highestRatio = jsonObject.get("highestRatio").getAsDouble();
         this.vRate = jsonObject.get("vRate").getAsDouble();
         this.maxChain = jsonObject.get("maxChain").getAsInt();
+        
+        this.CHAIN_KEY = this.uniqueName + "chain";
+        this.BBCHAIN_KEY = this.uniqueName + "BBChain";
+        this.NOWBB_KEY = this.uniqueName + "nowBB";
+        this.CHAT_COLOR = getChatColorByConfig(jsonObject.get("chatColor").getAsString());
     }
 
-    public void dropItem(Player player, Location bLocation){
+    public void mine(Player player, Location bLocation) {
 
-        double prob = Math.random();
-        double ratio = (exp( -pow(((modeHeight - bLocation.getY()) * 2) / (modeHeight * vRate), 2))) * highestRatio;
+        int bbChain = 0;
+        boolean isNowBB = false;
 
-        if (prob < ratio && prob > 0) {
-            player.getWorld().dropItemNaturally(bLocation, getItemStack());
-
-            int chain = (int) (Math.random() * (maxChain + 1));
-            player.setMetadata(this.uniqueName + "chain" ,new FixedMetadataValue(GrassGathering.getInstance(), chain));
+        for (MetadataValue a : player.getMetadata(this.BBCHAIN_KEY)) {
+            bbChain = (int) a.value();
         }
 
+        for(MetadataValue b : player.getMetadata(this.NOWBB_KEY)) {
+            isNowBB = (boolean) b.value();
+        }
+
+        if (bbChain > 0) {
+
+            bbChain(player, bLocation, isNowBB);
+
+        } else {
+            dropItem(player, bLocation, bbChain);
+            chainItem(player, bLocation);
+        }
     }
 
-    public void chainItem(Player player, Location bLocation) {
+    public void dropItem(Player player, Location bLocation, int bbChain) {
 
-        List<MetadataValue> chains = player.getMetadata(this.uniqueName + "chain");
+        if (bbChain == 0) {
 
-        for (MetadataValue chain : chains) {
-            if (chain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())) {
-                if ((int) chain.value() > 0) {
-                    int chain1 = (int) chain.value();
-                    player.getWorld().dropItemNaturally(bLocation, getItemStack());
+            double prob = Math.random();
+            double ratio = (exp(-pow(((modeHeight - bLocation.getY()) * 2) / (modeHeight * vRate), 2))) * highestRatio;
 
-                    player.setMetadata(this.uniqueName + "chain", new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
+            if (prob < ratio && prob > 0) {
+                player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), getItemStack());
+
+                int chain = (int) (Math.random() * (maxChain + 1));
+                player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain));
+
+                if (judgeChanceTime()) {
+
+                    player.setMetadata(this.BBCHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), 5));
+                    player.sendTitle("", "おや?" + this.CHAT_COLOR + "大鉱脈" + ChatColor.WHITE + "の予感が...", 25, 10, 10);
+
                 }
             }
         }
     }
 
+    public void chainItem(Player player, Location bLocation) {
+
+        List<MetadataValue> chains = player.getMetadata(this.CHAIN_KEY);
+
+        for (MetadataValue chain : chains) {
+            if (chain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())) {
+                if ((int) chain.value() > 0) {
+                    int chain1 = (int) chain.value();
+                    player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), getItemStack());
+
+                    player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
+                }
+            }
+        }
+    }
+
+    public void bbChain(Player player, Location bLocation, boolean isNowBB) {
+
+        List<MetadataValue> bbChains = player.getMetadata(this.BBCHAIN_KEY);
+
+        if (isNowBB) {
+
+            ItemStack itemToDrop = getItemStack();
+            itemToDrop.setAmount(2);
+            player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), itemToDrop);
+            bLocation.getWorld().spawnParticle(Particle.CRIT, bLocation, 25);
+            if (itemToDrop.getType().equals(Material.DIAMOND)) {
+                bLocation.getWorld().spawnParticle(Particle.LAVA, bLocation, 10);
+            }
+
+            for (MetadataValue bbChain : bbChains) {
+                if (bbChain.getOwningPlugin().getDescription().getName()
+                        .equals(GrassGathering.getInstance().getDescription().getName())) {
+
+                    player.setMetadata(this.BBCHAIN_KEY,
+                            new FixedMetadataValue(GrassGathering.getInstance(), (int) bbChain.value() - 1));
+
+                    if ((int) bbChain.value() == 1) {
+                        player.setMetadata(this.NOWBB_KEY,
+                                new FixedMetadataValue(GrassGathering.getInstance(), false));
+                    }
+                }
+            }
+        } else {
+
+            for (MetadataValue bbChain : bbChains) {
+                if (bbChain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())) {
+                    if ((int) bbChain.value() > 0) {
+                        player.setMetadata(this.BBCHAIN_KEY,
+                                new FixedMetadataValue(GrassGathering.getInstance(), (int) bbChain.value() - 1));
+                        if ((int) bbChain.value() == 1) {
+
+                            boolean isBB = judgeBigBonus();
+                            player.setMetadata(this.NOWBB_KEY,
+                                    new FixedMetadataValue(GrassGathering.getInstance(), isBB));
+                            if (isBB) {
+                                if (this.uniqueName.equals("Vanilla_DIAMOND")) {
+
+                                    specialBBEffect(player, bLocation);
+
+                                } else {
+
+                                    normalBBEffect(player, bLocation);
+
+                                }
+
+                            } else {
+                                player.sendTitle("", "残念...ただの鉱脈だった...", 10, 40, 10);
+
+
+                                player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), getItemStack());
+                                player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), (int) (Math.random() * (maxChain + 1))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean judgeChanceTime() {
+        return Math.random() < 1;
+    }
+
+    public boolean judgeBigBonus() {
+        return Math.random() < 0.5;
+    }
+
     public ItemStack getItemStack() {
-       return ItemBuilder.buildByUniqueName(uniqueName);
+       return ItemBuilder.buildByUniqueName(this.uniqueName);
+    }
+
+    private void normalBBEffect(Player player, Location bLocation) {
+
+        BukkitScheduler scheduler = GrassGathering.getInstance().getServer().getScheduler();
+
+        player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+        scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            }
+        }, 5L);
+        scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            }
+        }, 10L);
+        player.sendTitle("やった!!" + CHAT_COLOR + "大鉱脈" + ChatColor.WHITE + "だ!!!!", "", 5, 70, 10);
+        player.setMetadata(this.BBCHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), 10));
+        Bukkit.broadcastMessage(ChatColor.GREEN + "[大鉱脈当選情報!!] " + ChatColor.WHITE + player.getName() + "さんが" + this.CHAT_COLOR + this.getItemStack().getType().toString() + ChatColor.WHITE + "の大鉱脈を開拓しました!");
+    }
+
+    private void specialBBEffect(Player player, Location bLocation) {
+
+        BukkitScheduler scheduler = GrassGathering.getInstance().getServer().getScheduler();
+
+        player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+        scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            }
+        }, 5L);
+        scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            }
+        }, 10L);
+        scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            }
+        }, 15L);
+        scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.playSound(bLocation, Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            }
+        }, 20L);
+
+        player.sendTitle("やった!!!!" + CHAT_COLOR + "大鉱脈" + ChatColor.WHITE + "だ!!!!", "", 5, 70, 10);
+        player.setMetadata(this.BBCHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), 10));
+        Bukkit.broadcastMessage(ChatColor.AQUA + "[大鉱脈当選情報!!] " + ChatColor.WHITE + player.getName() + "さんが" + this.CHAT_COLOR + this.getItemStack().getType().toString() + ChatColor.WHITE + "の大鉱脈を開拓しました!");
+    }
+
+    public static ChatColor getChatColorByConfig(String string) {
+        if (string == null) {
+            return ChatColor.GOLD;
+        } else switch (string) {
+            case "coal":
+                return ChatColor.BLACK;
+            case "iron":
+                return ChatColor.GRAY;
+            case "gold":
+                return ChatColor.YELLOW;
+            case "emerald":
+                return ChatColor.GREEN;
+            case "redstone":
+                return ChatColor.DARK_RED;
+            case "diamond":
+                return ChatColor.AQUA;
+            default:
+                return ChatColor.GOLD;
+        }
     }
 }
