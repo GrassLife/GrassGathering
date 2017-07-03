@@ -16,8 +16,7 @@ public class MiningManager {
     public static void decideDrop(Player player, Location bLocation) {
 
         minableItems.forEach(item -> {
-            item.dropItem(player, bLocation);
-            item.chainItem(player, bLocation);
+            item.mine(player, bLocation);
         });
     }
 
@@ -28,6 +27,7 @@ public class MiningManager {
         Map<String, JsonObject> mineJsonMap = ResourceJsonContainer.getInstance().getMineJsonMap();
 
         mineJsonMap.forEach((name, item) -> {
+            System.out.println(item.get("chatColor").getAsString());
             minableItemList.add(new MinableItem(name, item));
         });
         return minableItemList;
