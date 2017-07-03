@@ -114,6 +114,9 @@ public class MinableItem {
             itemToDrop.setAmount(2);
             player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), itemToDrop);
             bLocation.getWorld().spawnParticle(Particle.CRIT, bLocation, 25);
+            if (itemToDrop.getType().equals(Material.DIAMOND)) {
+                bLocation.getWorld().spawnParticle(Particle.LAVA, bLocation, 10);
+            }
 
             for (MetadataValue bbChain : bbChains) {
                 if (bbChain.getOwningPlugin().getDescription().getName()
@@ -235,20 +238,23 @@ public class MinableItem {
     }
 
     public static ChatColor getChatColorByConfig(String string) {
-        if (string.equals("coal")) {
-            return ChatColor.BLACK;
-        } else if (string.equals("iron")) {
-            return ChatColor.GRAY;
-        } else if (string.equals("gold")) {
-            return ChatColor.YELLOW;
-        } else if (string.equals("emerald")) {
-            return ChatColor.GREEN;
-        } else if (string.equals("redstone")) {
-            return ChatColor.DARK_RED;
-        } else if (string.equals("diamond")) {
-            return ChatColor.AQUA;
-        } else {
+        if (string == null) {
             return ChatColor.GOLD;
+        } else switch (string) {
+            case "coal":
+                return ChatColor.BLACK;
+            case "iron":
+                return ChatColor.GRAY;
+            case "gold":
+                return ChatColor.YELLOW;
+            case "emerald":
+                return ChatColor.GREEN;
+            case "redstone":
+                return ChatColor.DARK_RED;
+            case "diamond":
+                return ChatColor.AQUA;
+            default:
+                return ChatColor.GOLD;
         }
     }
 }
