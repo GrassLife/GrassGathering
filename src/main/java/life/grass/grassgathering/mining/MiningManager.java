@@ -27,7 +27,6 @@ public class MiningManager {
         Map<String, JsonObject> mineJsonMap = ResourceJsonContainer.getInstance().getMineJsonMap();
 
         mineJsonMap.forEach((name, item) -> {
-            System.out.println(item.get("chatColor").getAsString());
             minableItemList.add(new MinableItem(name, item));
         });
         return minableItemList;

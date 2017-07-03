@@ -38,7 +38,6 @@ public class MinableItem {
         this.CHAIN_KEY = this.uniqueName + "chain";
         this.BBCHAIN_KEY = this.uniqueName + "BBChain";
         this.NOWBB_KEY = this.uniqueName + "nowBB";
-        System.out.println(jsonObject.get("chatColor").getAsString());
         this.CHAT_COLOR = getChatColorByConfig(jsonObject.get("chatColor").getAsString());
     }
 
