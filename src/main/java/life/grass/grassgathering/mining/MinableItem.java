@@ -168,7 +168,7 @@ public class MinableItem {
     }
 
     public boolean judgeChanceTime() {
-        return Math.random() < 1;
+        return Math.random() < 0.01;
     }
 
     public boolean judgeBigBonus() {
