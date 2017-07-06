@@ -20,7 +20,7 @@ public class MiningEvent implements Listener {
                 public void run() {
                     MiningManager.decideDrop(event.getPlayer(), bLocation);
                 }
-            }, 5L);
+            }, 8L);
 
         }
     }

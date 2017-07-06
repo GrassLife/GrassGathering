@@ -45,8 +45,8 @@ public class FishableItem {
     public ItemStack getItemStack() {
         ItemStack item = this.itemStack;
         double sizeRate = 0.5 + Math.random();
-        item = JsonHandler.putDynamicData(item, "ExpireDate", LocalDateTime.now().plusHours(expireHours).toString());
-        item = JsonHandler.putDynamicData(item, "FoodElement/SACHI", -sachi);
+        if (expireHours != 0) item = JsonHandler.putDynamicData(item, "ExpireDate", LocalDateTime.now().plusHours(expireHours).toString());
+        if (sachi != 0) item = JsonHandler.putDynamicData(item, "FoodElement/SACHI", -sachi);
         item = JsonHandler.putDynamicData(item, "Calorie", "*" + sizeRate);
         item = JsonHandler.putDynamicData(item, "Weight", "*" + sizeRate);
         double rand = Math.random();

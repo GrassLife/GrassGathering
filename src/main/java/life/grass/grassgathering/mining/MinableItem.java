@@ -72,7 +72,7 @@ public class MinableItem {
             double ratio = (exp(-pow(((modeHeight - bLocation.getY()) * 2) / (modeHeight * vRate), 2))) * highestRatio;
 
             if (prob < ratio && prob > 0) {
-                player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), getItemStack());
+                player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());
 
                 int chain = (int) (Math.random() * (maxChain + 1));
                 player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain));
@@ -95,7 +95,7 @@ public class MinableItem {
             if (chain.getOwningPlugin().getDescription().getName().equals(GrassGathering.getInstance().getDescription().getName())) {
                 if ((int) chain.value() > 0) {
                     int chain1 = (int) chain.value();
-                    player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), getItemStack());
+                    player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());
 
                     player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
                 }
@@ -111,7 +111,7 @@ public class MinableItem {
 
             ItemStack itemToDrop = getItemStack();
             itemToDrop.setAmount(2);
-            player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), itemToDrop);
+            player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), itemToDrop);
             bLocation.getWorld().spawnParticle(Particle.CRIT, bLocation, 25);
             if (itemToDrop.getType().equals(Material.DIAMOND)) {
                 bLocation.getWorld().spawnParticle(Particle.LAVA, bLocation, 10);
@@ -157,7 +157,7 @@ public class MinableItem {
                                 player.sendTitle("", "残念...ただの鉱脈だった...", 10, 40, 10);
 
 
-                                player.getWorld().dropItem(bLocation.add(0.5, 0.5, 0.5), getItemStack());
+                                player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());
                                 player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), (int) (Math.random() * (maxChain + 1))));
                             }
                         }
