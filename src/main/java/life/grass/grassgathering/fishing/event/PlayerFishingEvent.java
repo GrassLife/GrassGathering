@@ -16,31 +16,14 @@ public class PlayerFishingEvent implements Listener {
     @EventHandler
     public void onPlayerFishing(PlayerFishEvent event) {
 
-        FishPool fishPool = FishPool.getInstance();
-
-        Biome playerBiome = event.getPlayer().getLocation().getWorld()
-                .getBiome(event.getPlayer().getLocation().getBlockX(), event.getPlayer().getLocation().getBlockZ());
-
-        WeatherType playerWeather = event.getPlayer().getPlayerWeather();
-
-        event.setExpToDrop(0);
-
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
 
+            event.setExpToDrop(0);
+            
             Item gottenFish = (Item) event.getCaught();
-            List<Double> miss = FishingManager.makeSumList(FishingManager.getFailList());
+            ItemStack itemStack = FishPool.getInstance().giveFishTo(event.getPlayer());
 
-            if(FishingManager.probMaker(miss) == 0){
-                gottenFish.remove();
-                event.getPlayer().sendTitle("", "魚が逃げてしまった!!", 10, 70, 20);
-            } else {
-
-                List<Double> ratioList = fishPool.getRatioList(playerBiome, playerWeather);
-                List<Double> rsumList = FishingManager.makeSumList(ratioList);
-                ItemStack harvest = fishPool.getFishList().get(FishingManager.probMaker(rsumList)).getItemStack();
-                gottenFish.setItemStack(harvest);
-
-            }
+            gottenFish.setItemStack(itemStack);
         }
     }
 }

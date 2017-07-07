@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ResourceJsonContainer {
-    private static final String FISH_DIR_PATH = GrassGathering.getInstance().getDataFolder().getPath() + File.separator + "fishes";
+    private static final String FISH_DIR_PATH = GrassGathering.getInstance().getDataFolder().getPath() + File.separator + "fishableItems";
     private static final String MINE_DIR_PATH = GrassGathering.getInstance().getDataFolder().getPath() + File.separator + "mines";
 
     private static Gson gson;
     private static ResourceJsonContainer resourceJsonContainer;
 
-    private Map<String, JsonObject> fishJsonMap;
+    private Map<String, JsonObject> fishableItemJsonMap;
     private Map<String, JsonObject> mineJsonMap;
 
     static {
@@ -34,8 +34,8 @@ public class ResourceJsonContainer {
         return resourceJsonContainer;
     }
 
-    public Map<String, JsonObject> getFishJsonMap() {
-        return fishJsonMap;
+    public Map<String, JsonObject> getFishableItemJsonMap() {
+        return fishableItemJsonMap;
     }
 
     public Map<String, JsonObject> getMineJsonMap() {
@@ -43,7 +43,7 @@ public class ResourceJsonContainer {
     }
 
     public void refillContainer() {
-        fishJsonMap = new HashMap<>();
+        fishableItemJsonMap = new HashMap<>();
         mineJsonMap = new HashMap<>();
 
         File fishFolder = new File(FISH_DIR_PATH);
@@ -54,7 +54,7 @@ public class ResourceJsonContainer {
 
         Arrays.stream(fishFolder.listFiles())
                 .filter(file -> file.getName().endsWith(".json"))
-                .forEach(json -> loadJsonFromFile(json).ifPresent(jsonObject -> fishJsonMap.put(jsonObject.get("fishName").getAsString(), jsonObject)));
+                .forEach(json -> loadJsonFromFile(json).ifPresent(jsonObject -> fishableItemJsonMap.put(jsonObject.get("name").getAsString(), jsonObject)));
 
         Arrays.stream(mineFolder.listFiles())
                 .filter(file -> file.getName().endsWith(".json"))

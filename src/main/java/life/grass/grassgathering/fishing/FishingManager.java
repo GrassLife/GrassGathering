@@ -13,15 +13,6 @@ import java.util.List;
 
 public class FishingManager {
 
-
-    private static List<Double> failList = makeFailList();
-
-    public static List<Double> makeFailList(){
-        List<Double> list = new ArrayList<>();
-        list.add(5.0);
-        list.add(5.0);
-        return list;
-    }
     /*
     リストを渡すと各々のインデックスまでの総和を要素に持つ比のリストを生成します
      */
@@ -48,9 +39,5 @@ public class FishingManager {
         }
 
         return indexNumber;
-    }
-
-    public static List<Double> getFailList() {
-        return failList;
     }
 }
