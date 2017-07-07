@@ -1,6 +1,7 @@
 package life.grass.grassgathering;
 
 import life.grass.grassgathering.fishing.event.PlayerFishingEvent;
+import life.grass.grassgathering.harvesting.event.HarvestingEvent;
 import life.grass.grassgathering.mining.event.MiningEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +20,7 @@ public final class GrassGathering extends JavaPlugin {
         ResourceJsonContainer.getInstance();
         getServer().getPluginManager().registerEvents(new PlayerFishingEvent(), this);
         getServer().getPluginManager().registerEvents(new MiningEvent(), this);
+        getServer().getPluginManager().registerEvents(new HarvestingEvent(), this);
         getCommand("grassgathering").setExecutor(new GrassGatheringCommandExecutor());
     }
 
