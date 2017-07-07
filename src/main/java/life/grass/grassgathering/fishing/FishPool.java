@@ -2,6 +2,7 @@ package life.grass.grassgathering.fishing;
 
 import com.google.gson.JsonObject;
 import life.grass.grassgathering.ResourceJsonContainer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
@@ -23,7 +24,7 @@ public class FishPool {
     private FishPool() {
 
         fishList = makeFishableItems();
-
+        failList = makeFailList();
     }
 
     public static FishPool getInstance() {
@@ -49,10 +50,10 @@ public class FishPool {
     /*
     釣りをしているときのバイオームと天候などを渡してgetRealratioにより比取得して対応するindexに入れていきます。
      */
-    private ArrayList<Double> getRatioList(Biome b, WeatherType w) {
+    private ArrayList<Double> getRatioList(Player player) {
         ArrayList<Double> list = new ArrayList<>();
 
-        fishList.forEach(fish -> list.add(fish.getRealratio(b, w)));
+        fishList.forEach(fish -> list.add(fish.getRealratio(player)));
 
         return list;
     }
@@ -64,8 +65,7 @@ public class FishPool {
         if (isFailed()) {
             player.sendTitle("", "魚が逃げてしまった!!", 10, 70, 20);
         } else {
-            List<Double> ratioList = fishPool.getRatioList(player.getLocation().getWorld()
-                    .getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockZ()), player.getPlayerWeather());
+            List<Double> ratioList = fishPool.getRatioList(player);
             List<Double> rsumList = FishingManager.makeSumList(ratioList);
             itemStack = fishList.get(FishingManager.probMaker(rsumList)).getItemStack();
         }
