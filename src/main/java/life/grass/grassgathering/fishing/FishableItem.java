@@ -1,6 +1,5 @@
 package life.grass.grassgathering.fishing;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import life.grass.grassitem.ItemBuilder;
@@ -19,12 +18,15 @@ public abstract class FishableItem {
     private HashMap<String, Double> bioRate = new HashMap<>();
     private HashMap<String, Double> weatherRate = new HashMap<>();
     private List<FishableItemEnchant> enchantList = new ArrayList<>();
+    private boolean isOnlyOcean;
     protected ItemStack itemStack;
 
-    FishableItem(String name, JsonObject config){
+    FishableItem(String name, JsonObject config) {
 
         this.defaultRatio = config.get("defaultRatio").getAsInt();
         this.itemStack = ItemBuilder.buildByUniqueName(name);
+        this.isOnlyOcean = config.has("isOnlyOcean") && config.get("isOnlyOcean").getAsBoolean();
+
         if (config.has("bioRate")) {
             for (Map.Entry<String, JsonElement> entry : config.get("bioRate").getAsJsonObject().entrySet()) {
                 bioRate.put(entry.getKey(), entry.getValue().getAsDouble());
@@ -62,16 +64,23 @@ public abstract class FishableItem {
 
     public double getRealratio(Player player) {
 
-        double r1;
-        double r2;
+        if (this.isOnlyOcean && Math.abs(player.getLocation().getX()) < 2000 || Math.abs(player.getLocation().getZ()) < 2000) {
 
-        String bString = player.getWorld().getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockZ()).toString();
-        String wString = player.getWorld().hasStorm() ? player.getWorld().isThundering() ? "ThunderStorm" : "Rain" : "Clear";
+            return 0;
 
-        r1 = bioRate.get(bString) != null ? bioRate.get(bString) : bioRate.get("others") != null ? bioRate.get("others") : 1;
-        r2 = weatherRate.get(wString) != null ? weatherRate.get(wString) : weatherRate.get("others") != null ? weatherRate.get("others") : 1;
+        } else {
 
-        return r1 * r2 * defaultRatio;
+            double r1;
+            double r2;
+
+            String bString = player.getWorld().getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockZ()).toString();
+            String wString = player.getWorld().hasStorm() ? player.getWorld().isThundering() ? "ThunderStorm" : "Rain" : "Clear";
+
+            r1 = bioRate.get(bString) != null ? bioRate.get(bString) : bioRate.get("others") != null ? bioRate.get("others") : 1;
+            r2 = weatherRate.get(wString) != null ? weatherRate.get(wString) : weatherRate.get("others") != null ? weatherRate.get("others") : 1;
+
+            return r1 * r2 * defaultRatio;
+        }
     }
 
     public abstract ItemStack getItemStack();
