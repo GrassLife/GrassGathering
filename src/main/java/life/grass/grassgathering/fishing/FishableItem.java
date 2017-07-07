@@ -27,7 +27,6 @@ public abstract class FishableItem {
                 bioRate.put(entry.getKey(), entry.getValue().getAsDouble());
             }
         }
-          // this.bioRate = gson.fromJson(config.get("bioRate").getAsJsonObject(), new TypeToken<Map<String, Double>>(){}.getType());
         if (config.has("weatherRate")) {
             for (Map.Entry<String, JsonElement> entry : config.get("weatherRate").getAsJsonObject().entrySet()) {
                 weatherRate.put(entry.getKey(), entry.getValue().getAsDouble());
