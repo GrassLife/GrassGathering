@@ -14,5 +14,4 @@ public class GrassTreasure extends FishableItem {
         return super.itemStack;
     }
 
-
 }
