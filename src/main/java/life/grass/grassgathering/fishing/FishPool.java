@@ -1,12 +1,11 @@
 package life.grass.grassgathering.fishing;
 
 import com.google.gson.JsonObject;
+import life.grass.grassgathering.GPCalculator;
 import life.grass.grassgathering.ResourceJsonContainer;
-import org.bukkit.Bukkit;
+import life.grass.grassitem.GrassJson;
+import life.grass.grassitem.JsonHandler;
 import org.bukkit.Material;
-import org.bukkit.WeatherType;
-import org.bukkit.block.Biome;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,12 +18,10 @@ public class FishPool {
 
     private static FishPool fishPool = new FishPool();
     private static List<FishableItem> fishList = makeFishableItems();
-    private static List<Double> failList = makeFailList();
 
     private FishPool() {
 
         fishList = makeFishableItems();
-        failList = makeFailList();
     }
 
     public static FishPool getInstance() {
@@ -53,7 +50,7 @@ public class FishPool {
     private ArrayList<Double> getRatioList(Player player) {
         ArrayList<Double> list = new ArrayList<>();
 
-        fishList.forEach(fish -> list.add(fish.getRealratio(player)));
+        fishList.forEach(fish -> list.add(fish.getRealRatio(player)));
 
         return list;
     }
@@ -62,7 +59,7 @@ public class FishPool {
 
         ItemStack itemStack = null;
 
-        if (isFailed()) {
+        if (isFailed(player)) {
             player.sendTitle("", "魚が逃げてしまった!!", 10, 70, 20);
         } else {
             List<Double> ratioList = fishPool.getRatioList(player);
@@ -72,15 +69,33 @@ public class FishPool {
         return Optional.ofNullable(itemStack).orElse(new ItemStack(Material.AIR));
     }
 
-    private static List<Double> makeFailList(){
+    private List<Double> makeFailList(Player player){
+        int gatheringPower;
+        if (player.getInventory().getItemInMainHand().getType().equals(Material.FISHING_ROD)) {
+
+            GrassJson grassJson = JsonHandler.getGrassJson(player.getInventory().getItemInMainHand());
+            gatheringPower = grassJson.getJsonReader().getActualGatheringPower();
+
+        } else if (player.getInventory().getItemInOffHand().getType().equals(Material.FISHING_ROD)) {
+
+            GrassJson grassJson = JsonHandler.getGrassJson(player.getInventory().getItemInOffHand());
+            gatheringPower = grassJson.getJsonReader().getActualGatheringPower();
+
+        } else {
+
+            gatheringPower = 0;
+
+        }
+
         List<Double> list = new ArrayList<>();
-        list.add(5.0);
-        list.add(5.0);
+        double successRate = (GPCalculator.toStandardRate(gatheringPower) * 5) - 4;
+        list.add(1.0);
+        list.add(successRate > 0.1 ? successRate : 0.1);
         return list;
     }
 
-    private static boolean isFailed() {
-        return FishingManager.probMaker(FishingManager.makeSumList(failList)) == 0;
+    private boolean isFailed(Player player) {
+        return FishingManager.probMaker(FishingManager.makeSumList(makeFailList(player))) == 0;
     }
 
     public void releaseFishes() {

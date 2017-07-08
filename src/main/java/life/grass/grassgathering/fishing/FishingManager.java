@@ -1,14 +1,6 @@
 package life.grass.grassgathering.fishing;
 
-import life.grass.grassgathering.GrassGathering;
-import org.bukkit.Material;
-import org.bukkit.WeatherType;
-import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FishingManager {

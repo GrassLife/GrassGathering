@@ -1,8 +1,11 @@
 package life.grass.grassgathering.mining;
 
 import com.google.gson.JsonObject;
+import life.grass.grassgathering.GPCalculator;
 import life.grass.grassgathering.GrassGathering;
+import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.ItemBuilder;
+import life.grass.grassitem.JsonHandler;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +44,7 @@ public class MinableItem {
         this.CHAT_COLOR = getChatColorByConfig(jsonObject.get("chatColor").getAsString());
     }
 
-    public void mine(Player player, Location bLocation) {
+    public void mine(Player player, boolean isNormalStone, Location bLocation) {
 
         int bbChain = 0;
         boolean isNowBB = false;
@@ -50,7 +53,7 @@ public class MinableItem {
             bbChain = (int) a.value();
         }
 
-        for(MetadataValue b : player.getMetadata(this.NOWBB_KEY)) {
+        for (MetadataValue b : player.getMetadata(this.NOWBB_KEY)) {
             isNowBB = (boolean) b.value();
         }
 
@@ -59,17 +62,28 @@ public class MinableItem {
             bbChain(player, bLocation, isNowBB);
 
         } else {
-            dropItem(player, bLocation, bbChain);
+            dropItem(player, isNormalStone, bLocation, bbChain);
             chainItem(player, bLocation);
         }
     }
 
-    public void dropItem(Player player, Location bLocation, int bbChain) {
+    public void dropItem(Player player, boolean isNormalStone, Location bLocation, int bbChain) {
 
         if (bbChain == 0) {
 
             double prob = Math.random();
-            double ratio = (exp(-pow(((modeHeight - bLocation.getY()) * 2) / (modeHeight * vRate), 2))) * highestRatio;
+            double gRate;
+            GrassJson grassJson = JsonHandler.getGrassJson(player.getInventory().getItemInMainHand());
+            if (grassJson != null) {
+                gRate = GPCalculator.toStandardRate(grassJson.getJsonReader().getActualGatheringPower());
+            } else {
+                gRate = GPCalculator.toStandardRate(0);
+            }
+
+            if (gRate > 0.2 && !isNormalStone) gRate = 0.2;
+
+            double ratio = (exp(-pow(((modeHeight - bLocation.getY()) * 2) / (modeHeight * vRate), 2)))
+                    * highestRatio * gRate;
 
             if (prob < ratio && prob > 0) {
                 player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());

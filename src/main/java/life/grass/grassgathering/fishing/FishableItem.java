@@ -2,6 +2,7 @@ package life.grass.grassgathering.fishing;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.ItemBuilder;
 import life.grass.grassitem.JsonHandler;
 import org.bukkit.entity.Player;
@@ -62,9 +63,9 @@ public abstract class FishableItem {
         return list;
     }
 
-    public double getRealratio(Player player) {
+    public double getRealRatio(Player player) {
 
-        if (this.isOnlyOcean && Math.abs(player.getLocation().getX()) < 2000 || Math.abs(player.getLocation().getZ()) < 2000) {
+        if (this.isOnlyOcean && (Math.abs(player.getLocation().getX()) < 2000 || Math.abs(player.getLocation().getZ()) < 2000)) {
 
             return 0;
 

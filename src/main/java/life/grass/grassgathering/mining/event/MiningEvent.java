@@ -15,10 +15,11 @@ public class MiningEvent implements Listener {
         Location bLocation = event.getBlock().getLocation();
         if(event.getBlock().getType() == Material.STONE) {
             BukkitScheduler scheduler = GrassGathering.getInstance().getServer().getScheduler();
+            boolean isNormalStone = event.getBlock().getData() == 0;
             scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    MiningManager.decideDrop(event.getPlayer(), bLocation);
+                    MiningManager.decideDrop(event.getPlayer(), isNormalStone, bLocation);
                 }
             }, 8L);
 
