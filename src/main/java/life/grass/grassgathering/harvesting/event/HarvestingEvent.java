@@ -26,16 +26,13 @@ public class HarvestingEvent implements Listener {
     }
 
     @EventHandler
-    public void onRightClickWithPotato(PlayerInteractEvent event) {
-        System.out.println(event.getClickedBlock().getType().toString());
-
-
+    public void onRightClickWithExceptionalCrops(PlayerInteractEvent event) {
+        
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                 && event.getClickedBlock().getType().equals(Material.SOIL)
                 && (event.getMaterial().equals(Material.POTATO_ITEM) || event.getMaterial().equals(Material.CARROT_ITEM))) {
 
             String uniqueName = JsonHandler.getGrassJson(event.getItem()).getUniqueName();
-            System.out.println(uniqueName);
             if (!uniqueName.equals("seed_potato") && !uniqueName.equals("seed_carrot")) {
                 event.setCancelled(true);
             }
