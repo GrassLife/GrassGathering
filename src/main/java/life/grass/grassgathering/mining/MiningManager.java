@@ -3,6 +3,7 @@ package life.grass.grassgathering.mining;
 import com.google.gson.JsonObject;
 import life.grass.grassgathering.ResourceJsonContainer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -13,10 +14,10 @@ public class MiningManager {
 
     private static List<MinableItem> minableItems = makeMinableItems();
 
-    public static void decideDrop(Player player, Location bLocation) {
+    public static void decideDrop(Player player, boolean isNormalStone, Location bLocation) {
 
         minableItems.forEach(item -> {
-            item.mine(player, bLocation);
+            item.mine(player, isNormalStone, bLocation);
         });
     }
 
