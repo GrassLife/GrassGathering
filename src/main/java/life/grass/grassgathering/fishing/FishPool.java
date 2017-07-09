@@ -88,9 +88,9 @@ public class FishPool {
         }
 
         List<Double> list = new ArrayList<>();
-        double successRate = (GPCalculator.toStandardRate(gatheringPower) * 5) - 4;
+        double successRate = ((GPCalculator.toArcTanRate(gatheringPower, 4) * 5) - 0.5);
         list.add(1.0);
-        list.add(successRate > 0.1 ? successRate : 0.1);
+        list.add(successRate < 0.1 ? 0.1 : successRate);
         return list;
     }
 

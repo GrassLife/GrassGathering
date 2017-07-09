@@ -75,9 +75,9 @@ public class MinableItem {
             double gRate;
             GrassJson grassJson = JsonHandler.getGrassJson(player.getInventory().getItemInMainHand());
             if (grassJson != null) {
-                gRate = GPCalculator.toStandardRate(grassJson.getJsonReader().getActualGatheringPower());
+                gRate = GPCalculator.toLogRate(grassJson.getJsonReader().getActualGatheringPower());
             } else {
-                gRate = GPCalculator.toStandardRate(0);
+                gRate = GPCalculator.toLogRate(0);
             }
 
             if (gRate > 0.2 && !isNormalStone) gRate = 0.2;

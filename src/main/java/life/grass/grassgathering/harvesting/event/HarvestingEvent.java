@@ -41,9 +41,9 @@ public class HarvestingEvent implements Listener {
 
     @EventHandler
     public void onBreakExceptionalCrops(BlockBreakEvent event) {
-        event.setDropItems(false);
         Material blockType = event.getBlock().getType();
         if (blockType.equals(Material.POTATO) || blockType.equals(Material.CARROT)) {
+            event.setDropItems(false);
             GrassCrop crop;
             if (blockType.equals(Material.POTATO)) {
                 crop = new GrassCrop(new ItemStack(Material.POTATO_ITEM));
