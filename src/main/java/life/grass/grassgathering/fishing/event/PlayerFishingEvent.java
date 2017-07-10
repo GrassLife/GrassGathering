@@ -1,41 +1,48 @@
 package life.grass.grassgathering.fishing.event;
 
-import life.grass.grassgathering.fishing.FishableItem;
+import life.grass.grassgathering.fishing.FishPool;
 import life.grass.grassgathering.fishing.FishingManager;
+import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Fish;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-/**
- * Created by cyclicester on 2016/09/03.
- */
 public class PlayerFishingEvent implements Listener {
     @EventHandler
     public void onPlayerFishing(PlayerFishEvent event) {
-        Biome playerBiome = event.getPlayer().getLocation().getWorld()
-                .getBiome(event.getPlayer().getLocation().getBlockX(), event.getPlayer().getLocation().getBlockZ());
-        WeatherType playerWeather = event.getPlayer().getPlayerWeather();
-        event.setExpToDrop(0);
 
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-            Item gottenFish = (Item) event.getCaught();
-            List<Double> miss = FishingManager.makeSumList(FishingManager.getFailList());
-            if(FishingManager.probMaker(miss) == 0){
-                gottenFish.remove();
-            } else {
-                List<Double> ratioList = FishingManager.makeRatioList(playerBiome, playerWeather);
-                List<Double> rsumList = FishingManager.makeSumList(ratioList);
-                FishableItem harvest = FishingManager.getFishList().get(FishingManager.probMaker(rsumList));
-                        System.out.println("You gotta" + harvest);
-                        gottenFish.setItemStack(FishingManager.getFitemMap().get(harvest));
-                    }
-                }
 
+            event.setExpToDrop(0);
+
+            Item gottenFish = (Item) event.getCaught();
+            ItemStack itemStack = FishPool.getInstance().giveFishTo(event.getPlayer());
+
+            gottenFish.setItemStack(itemStack);
+        }
     }
 
+    @EventHandler
+    public void onReleaseFish(PlayerInteractEvent event) {
+
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            List<Block> lineOfSight = event.getPlayer().getLineOfSight(null, 5);
+            for (Block b : lineOfSight) {
+                if (b.getType() == Material.STATIONARY_WATER && event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.RAW_FISH)) {
+                    event.getPlayer().getInventory().getItemInMainHand().setAmount(0);
+                    event.getPlayer().sendTitle("", FishingManager.releaseMessage(), 40, 10, 10);
+                }
+            }
+        }
+    }
 }

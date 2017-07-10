@@ -9,21 +9,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
-/**
- * Created by takah on 2016/10/04.
- */
 public class MiningEvent implements Listener {
     @EventHandler
     public void onMining(BlockBreakEvent event){
         Location bLocation = event.getBlock().getLocation();
         if(event.getBlock().getType() == Material.STONE) {
             BukkitScheduler scheduler = GrassGathering.getInstance().getServer().getScheduler();
+            boolean isNormalStone = event.getBlock().getData() == 0;
             scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    MiningManager.decideDrop(event, bLocation);
+                    MiningManager.decideDrop(event.getPlayer(), isNormalStone, bLocation);
                 }
-            }, 5L);
+            }, 8L);
 
         }
     }

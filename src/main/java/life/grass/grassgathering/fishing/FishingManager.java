@@ -1,59 +1,9 @@
 package life.grass.grassgathering.fishing;
 
-import org.bukkit.Material;
-import org.bukkit.WeatherType;
-import org.bukkit.block.Biome;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by takah on 2016/09/08.
- */
 public class FishingManager {
-
-    private static List<FishableItem> fishList = makeItemList();
-    private static HashMap<FishableItem, ItemStack> fitemMap = makeFitemMap();
-    private static List<Double> failList = makeFailList();
-
-    /*
-    実装時はコンフィグからアイテムのリストを作る予定。
-     */
-    public static List<FishableItem> makeItemList() {
-        List<FishableItem> list = new ArrayList<>();
-        for (int i = 0; i <= 2; i++) {
-            list.add(new FishableItem(1));
-        }
-        return list;
-    }
-
-    public static HashMap<FishableItem, ItemStack> makeFitemMap(){
-        HashMap<FishableItem, ItemStack> map = new HashMap<>();
-        map.put(fishList.get(0), new ItemStack(Material.RAW_BEEF));
-        map.put(fishList.get(1), new ItemStack(Material.RAW_CHICKEN));
-        map.put(fishList.get(2), new ItemStack(Material.RAW_FISH));
-        return map;
-    }
-
-    public static List<Double> makeFailList(){
-        List<Double> list = new ArrayList<>();
-        list.add(5.0);
-        list.add(5.0);
-        return list;
-    }
-
-    /*
-    釣りをしているときのバイオームと天候などを渡してgetRealratioにより比取得して対応するindexに入れていきます。
-     */
-    public static ArrayList<Double> makeRatioList(Biome b, WeatherType w) {
-        ArrayList<Double> list = new ArrayList<>();
-        for (int i = 0; i < fishList.size(); i++) {
-            list.add(fishList.get(i).getRealratio(b, w));
-        }
-        return list;
-    }
 
     /*
     リストを渡すと各々のインデックスまでの総和を要素に持つ比のリストを生成します
@@ -72,7 +22,6 @@ public class FishingManager {
      */
     public static int probMaker(List<Double> list) {
         double random = Math.random() * list.get(list.size() - 1);
-        System.out.println(random);
         int indexNumber = 0;
         for (int i = 0; i < list.size(); i++) {
             double left = i == 0 ? 0 : list.get(i - 1);
@@ -84,17 +33,21 @@ public class FishingManager {
         return indexNumber;
     }
 
+    public static String releaseMessage() {
 
+        double param = Math.random() * 4.5;
 
-    public static List<FishableItem> getFishList() {
-        return fishList;
-    }
+        if (param < 1) {
+            return "ありがとう...ありがとう...";
+        } else if (param < 2) {
+            return "これでみんなのところにかえれる...!!";
+        } else if (param < 3) {
+            return "このご恩はいつか必ず...!";
+        } else if (param < 4) {
+            return "助かった...";
+        } else {
+            return "フン!!逃すくらいなら最初っから釣るなってんだ!!";
+        }
 
-    public static HashMap<FishableItem, ItemStack> getFitemMap() {
-        return fitemMap;
-    }
-
-    public static List<Double> getFailList() {
-        return failList;
     }
 }
