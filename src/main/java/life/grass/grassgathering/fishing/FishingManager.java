@@ -32,4 +32,22 @@ public class FishingManager {
 
         return indexNumber;
     }
+
+    public static String releaseMessage() {
+
+        double param = Math.random() * 4.5;
+
+        if (param < 1) {
+            return "ありがとう...ありがとう...";
+        } else if (param < 2) {
+            return "これでみんなのところにかえれる...!!";
+        } else if (param < 3) {
+            return "このご恩はいつか必ず...!";
+        } else if (param < 4) {
+            return "助かった...";
+        } else {
+            return "フン!!逃すくらいなら最初っから釣るなってんだ!!";
+        }
+
+    }
 }
