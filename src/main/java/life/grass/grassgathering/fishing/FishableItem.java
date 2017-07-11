@@ -65,7 +65,7 @@ public abstract class FishableItem {
 
     public double getRealRatio(Player player) {
 
-        if (this.isOnlyOcean && (Math.abs(player.getLocation().getX()) < 2000 || Math.abs(player.getLocation().getZ()) < 2000)) {
+        if (this.isOnlyOcean && (Math.abs(player.getLocation().getX()) < 2000 && Math.abs(player.getLocation().getZ()) < 2000)) {
 
             return 0;
 
