@@ -1,7 +1,7 @@
 package life.grass.grassgathering.mining.event;
 
 import life.grass.grassgathering.GrassGathering;
-import life.grass.grassgathering.mining.MiningManager;
+import life.grass.grassgathering.mining.MinePool;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -14,12 +14,14 @@ public class MiningEvent implements Listener {
     public void onMining(BlockBreakEvent event){
         Location bLocation = event.getBlock().getLocation();
         if(event.getBlock().getType() == Material.STONE) {
+
             BukkitScheduler scheduler = GrassGathering.getInstance().getServer().getScheduler();
             boolean isNormalStone = event.getBlock().getData() == 0;
+
             scheduler.scheduleSyncDelayedTask(GrassGathering.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    MiningManager.decideDrop(event.getPlayer(), isNormalStone, bLocation);
+                    MinePool.getInstance().decideDrop(event.getPlayer(), isNormalStone, bLocation);
                 }
             }, 8L);
 

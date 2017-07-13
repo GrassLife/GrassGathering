@@ -3,25 +3,33 @@ package life.grass.grassgathering.mining;
 import com.google.gson.JsonObject;
 import life.grass.grassgathering.ResourceJsonContainer;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MiningManager {
+public class MinePool {
 
-    private static List<MinableItem> minableItems = makeMinableItems();
+    private static MinePool minePool = new MinePool();
+    private static List<MinableItem> minableItems;
 
-    public static void decideDrop(Player player, boolean isNormalStone, Location bLocation) {
+    private MinePool() {
+        minableItems = makeMinableItems();
+    }
+
+    public static MinePool getInstance() {
+        return minePool;
+    }
+
+    public void decideDrop(Player player, boolean isNormalStone, Location bLocation) {
 
         minableItems.forEach(item -> {
             item.mine(player, isNormalStone, bLocation);
         });
     }
 
-    private static List<MinableItem> makeMinableItems() {
+    private List<MinableItem> makeMinableItems() {
 
         List<MinableItem> minableItemList = new ArrayList<>();
 
@@ -33,7 +41,7 @@ public class MiningManager {
         return minableItemList;
     }
 
-    public static void setMinableItems() {
+    public void setMinableItems() {
         minableItems = makeMinableItems();
     }
 }

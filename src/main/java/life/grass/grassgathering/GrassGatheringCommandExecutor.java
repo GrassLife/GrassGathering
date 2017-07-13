@@ -1,7 +1,7 @@
 package life.grass.grassgathering;
 
 import life.grass.grassgathering.fishing.FishPool;
-import life.grass.grassgathering.mining.MiningManager;
+import life.grass.grassgathering.mining.MinePool;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +19,7 @@ public class GrassGatheringCommandExecutor implements CommandExecutor {
             case "RELOAD":
                 ResourceJsonContainer.getInstance().fillResourceJsonContainer();
                 FishPool.getInstance().releaseFishes();
-                MiningManager.setMinableItems();
+                MinePool.getInstance().setMinableItems();
                 sender.sendMessage(ChatColor.GREEN + "Reloaded.");
                 return true;
             default:
