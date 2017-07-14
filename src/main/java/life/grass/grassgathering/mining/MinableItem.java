@@ -30,6 +30,7 @@ public class MinableItem {
     private final String BBCHAIN_KEY;
     private final String NOWBB_KEY;
     private final ChatColor CHAT_COLOR;
+    private final boolean HAS_BB;
 
     MinableItem(String name, JsonObject jsonObject) {
         this.uniqueName = name;
@@ -42,6 +43,7 @@ public class MinableItem {
         this.BBCHAIN_KEY = this.uniqueName + "BBChain";
         this.NOWBB_KEY = this.uniqueName + "nowBB";
         this.CHAT_COLOR = getChatColorByConfig(jsonObject.get("chatColor").getAsString());
+        this.HAS_BB = jsonObject.has("hasBB") && jsonObject.get("hasBB").getAsBoolean();
     }
 
     public void mine(Player player, boolean isNormalStone, Location bLocation) {
@@ -57,7 +59,7 @@ public class MinableItem {
             isNowBB = (boolean) b.value();
         }
 
-        if (bbChain > 0) {
+        if (bbChain > 0 && this.HAS_BB) {
 
             bbChain(player, bLocation, isNowBB);
 
