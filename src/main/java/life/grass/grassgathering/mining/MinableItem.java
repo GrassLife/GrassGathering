@@ -25,6 +25,7 @@ public class MinableItem {
     private final double highestRatio;
     private final double vRate;
     private final int maxChain;
+    private final int exp;
 
     private final String CHAIN_KEY;
     private final String BBCHAIN_KEY;
@@ -38,6 +39,7 @@ public class MinableItem {
         this.highestRatio = jsonObject.get("highestRatio").getAsDouble();
         this.vRate = jsonObject.get("vRate").getAsDouble();
         this.maxChain = jsonObject.get("maxChain").getAsInt();
+        this.exp = jsonObject.get("exp").getAsInt();
         
         this.CHAIN_KEY = this.uniqueName + "chain";
         this.BBCHAIN_KEY = this.uniqueName + "BBChain";
@@ -89,6 +91,7 @@ public class MinableItem {
 
             if (prob < ratio && prob > 0) {
                 player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());
+                player.giveExp(exp);
 
                 int chain = (int) (Math.random() * (maxChain + 1));
                 player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain));
@@ -114,6 +117,8 @@ public class MinableItem {
                     player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());
 
                     player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
+                    player.giveExp(100);
+                    player.sendMessage("exp");
                 }
             }
         }
@@ -128,6 +133,7 @@ public class MinableItem {
             ItemStack itemToDrop = getItemStack();
             itemToDrop.setAmount(2);
             player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), itemToDrop);
+
             bLocation.getWorld().spawnParticle(Particle.CRIT, bLocation, 25);
             if (itemToDrop.getType().equals(Material.DIAMOND)) {
                 bLocation.getWorld().spawnParticle(Particle.LAVA, bLocation, 10);

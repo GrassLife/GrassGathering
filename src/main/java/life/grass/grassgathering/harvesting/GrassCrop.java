@@ -6,6 +6,7 @@ import life.grass.grassitem.JsonHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 public class GrassCrop {
@@ -24,11 +25,12 @@ public class GrassCrop {
         GrassJson json = this.getGrassJson();
         if (json == null) return;
         if (!json.hasDynamicValueInItem("ExpireDate") && json.hasItemTag("Ingredient")) {
-            if (drop.getItemStack().getType().equals(Material.POTATO_ITEM)) {
-            }
             this.itemStack = JsonHandler.putExpireDateHours(this.itemStack, 12);
             this.itemStack = putSpeciality(this.itemStack, drop.getLocation());
             drop.setItemStack(this.itemStack);
+            System.out.println("desu");
+            int dropExp = Math.random() <= 0.02 ? 1 : 0;
+            drop.getWorld().spawn(drop.getLocation(), ExperienceOrb.class).setExperience(dropExp);
         }
     }
 
