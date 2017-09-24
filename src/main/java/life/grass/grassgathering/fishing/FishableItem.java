@@ -20,6 +20,7 @@ public abstract class FishableItem {
     private HashMap<String, Double> weatherRate = new HashMap<>();
     private List<FishableItemEnchant> enchantList = new ArrayList<>();
     private boolean isOnlyOcean;
+    private int exp;
     protected ItemStack itemStack;
 
     FishableItem(String name, JsonObject config) {
@@ -27,6 +28,7 @@ public abstract class FishableItem {
         this.defaultRatio = config.get("defaultRatio").getAsInt();
         this.itemStack = ItemBuilder.buildByUniqueName(name);
         this.isOnlyOcean = config.has("isOnlyOcean") && config.get("isOnlyOcean").getAsBoolean();
+        this.exp = config.has("exp") ? config.get("exp").getAsInt() : 3;
 
         if (config.has("bioRate")) {
             for (Map.Entry<String, JsonElement> entry : config.get("bioRate").getAsJsonObject().entrySet()) {
@@ -82,6 +84,10 @@ public abstract class FishableItem {
 
             return r1 * r2 * defaultRatio;
         }
+    }
+
+    public int getExp() {
+        return this.exp;
     }
 
     public abstract ItemStack getItemStack();
