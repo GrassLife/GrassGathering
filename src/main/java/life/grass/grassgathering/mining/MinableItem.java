@@ -117,8 +117,7 @@ public class MinableItem {
                     player.getWorld().dropItem(bLocation.add(0.5, 0, 0.5), getItemStack());
 
                     player.setMetadata(this.CHAIN_KEY, new FixedMetadataValue(GrassGathering.getInstance(), chain1 - 1));
-                    player.giveExp(100);
-                    player.sendMessage("exp");
+                    player.giveExp(this.exp);
                 }
             }
         }

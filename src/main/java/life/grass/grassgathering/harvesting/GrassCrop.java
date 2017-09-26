@@ -28,9 +28,10 @@ public class GrassCrop {
             this.itemStack = JsonHandler.putExpireDateHours(this.itemStack, 12);
             this.itemStack = putSpeciality(this.itemStack, drop.getLocation());
             drop.setItemStack(this.itemStack);
-            System.out.println("desu");
             int dropExp = Math.random() <= 0.02 ? 1 : 0;
-            drop.getWorld().spawn(drop.getLocation(), ExperienceOrb.class).setExperience(dropExp);
+            if (!(drop.getItemStack().getType() == Material.BROWN_MUSHROOM) && !(drop.getItemStack().getType() == Material.RED_MUSHROOM)) {
+                drop.getWorld().spawn(drop.getLocation(), ExperienceOrb.class).setExperience(dropExp);
+            }
         }
     }
 
