@@ -64,7 +64,9 @@ public class FishPool {
         } else {
             List<Double> ratioList = fishPool.getRatioList(player);
             List<Double> rsumList = FishingManager.makeSumList(ratioList);
-            itemStack = fishList.get(FishingManager.probMaker(rsumList)).getItemStack();
+            FishableItem fishableItem = fishList.get(FishingManager.probMaker(rsumList));
+            itemStack = fishableItem.getItemStack();
+            player.giveExp(fishableItem.getExp());
         }
         return Optional.ofNullable(itemStack).orElse(new ItemStack(Material.AIR));
     }
